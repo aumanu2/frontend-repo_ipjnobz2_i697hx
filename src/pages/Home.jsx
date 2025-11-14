@@ -92,85 +92,123 @@ export default function Home() {
           </motion.div>
         </div>
 
-        {/* Refined campus strip animation */}
+        {/* Realistic-ish walking student scene (SVG) */}
         <motion.section
-          className="relative mt-16 rounded-3xl overflow-hidden border border-white/50 bg-white/60 backdrop-blur shadow-lg"
+          className="relative mt-16 rounded-3xl overflow-hidden border border-white/50 bg-white/60 backdrop-blur shadow-xl"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          {/* Gradient sky */}
-          <div className="absolute inset-0 bg-gradient-to-r from-sky-50 via-sky-100 to-indigo-100" />
-
-          {/* Parallax layers: skyline */}
-          <motion.div
-            className="relative h-36 md:h-44"
+          <motion.svg
+            viewBox="0 0 1200 360"
+            className="w-full h-[240px] md:h-[300px]"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            {/* back buildings */}
-            <motion.div
-              className="absolute inset-x-0 bottom-16 flex gap-6 px-6"
-              style={{ opacity: 0.35 }}
-              animate={prefersReducedMotion ? undefined : { x: [0, 10, 0] }}
-              transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <div className="h-12 w-24 bg-slate-300/60 rounded-md" />
-              <div className="h-16 w-16 bg-slate-300/60 rounded-md" />
-              <div className="h-10 w-20 bg-slate-300/60 rounded-md" />
-              <div className="h-14 w-24 bg-slate-300/60 rounded-md" />
-            </motion.div>
+            {/* Sky */}
+            <defs>
+              <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#E0F2FE"/>
+                <stop offset="100%" stopColor="#EEF2FF"/>
+              </linearGradient>
+              <linearGradient id="pathGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#CBD5E1"/>
+                <stop offset="100%" stopColor="#94A3B8"/>
+              </linearGradient>
+            </defs>
+            <rect x="0" y="0" width="1200" height="360" fill="url(#skyGrad)" />
 
-            {/* mid trees */}
-            <motion.div
-              className="absolute inset-x-0 bottom-12 flex items-end gap-3 px-6"
-              style={{ opacity: 0.6 }}
-              animate={prefersReducedMotion ? undefined : { x: [0, -12, 0] }}
-              transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              {[...Array(8)].map((_, i) => (
-                <div key={i} className="flex flex-col items-center">
-                  <div className="w-1.5 h-6 bg-emerald-700 rounded" />
-                  <div className="w-6 h-6 -mt-1 bg-emerald-400 rounded-full" />
-                </div>
+            {/* Distant buildings */}
+            <g opacity="0.25">
+              <rect x="60" y="120" width="120" height="90" rx="8" fill="#94A3B8" />
+              <rect x="220" y="100" width="100" height="110" rx="6" fill="#94A3B8" />
+              <rect x="360" y="140" width="160" height="70" rx="10" fill="#94A3B8" />
+              <rect x="560" y="110" width="140" height="100" rx="8" fill="#94A3B8" />
+              <rect x="740" y="130" width="110" height="80" rx="8" fill="#94A3B8" />
+              <rect x="880" y="120" width="150" height="90" rx="8" fill="#94A3B8" />
+            </g>
+
+            {/* Trees */}
+            <g opacity="0.75">
+              {[...Array(14)].map((_, i) => (
+                <g key={i} transform={`translate(${80 + i * 80}, 210)`}>
+                  <rect x="-2" y="12" width="4" height="28" fill="#065F46" rx="2" />
+                  <circle cx="0" cy="6" r="14" fill="#34D399" />
+                </g>
               ))}
-            </motion.div>
+            </g>
 
-            {/* path */}
-            <svg className="absolute inset-x-0 bottom-0 h-20" viewBox="0 0 800 160" preserveAspectRatio="none" aria-hidden>
-              <path d="M0,120 C200,90 320,130 420,110 C540,84 660,108 800,90 L800,160 L0,160 Z" fill="rgba(148,163,184,0.45)" />
-              <path d="M0,130 C220,110 350,140 470,120 C600,100 700,120 800,105" fill="none" stroke="rgba(100,116,139,0.45)" strokeWidth="2" />
-            </svg>
+            {/* Path */}
+            <path d="M0,260 C220,230 380,280 560,250 C760,215 980,250 1200,230 L1200,360 L0,360 Z" fill="url(#pathGrad)" opacity="0.5" />
+            <path d="M0,270 C240,250 420,290 600,260 C820,225 1020,260 1200,245" fill="none" stroke="#64748B" strokeWidth="3" opacity="0.5" />
 
-            {/* destination building */}
-            <motion.div
-              className="absolute right-6 bottom-16 w-28 md:w-36 h-20 md:h-24 bg-white/90 border border-slate-200 rounded-lg shadow"
-              initial={{ y: 8, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.2 }}
+            {/* Destination building (class) */}
+            <g transform="translate(980,168)">
+              <rect x="0" y="0" width="160" height="110" rx="10" fill="#FFFFFF" stroke="#E2E8F0" />
+              <text x="80" y="18" textAnchor="middle" fontSize="14" fontWeight="600" fill="#334155">Gedung Kelas</text>
+              {[...Array(3)].map((_, r) => (
+                [...Array(4)].map((__, c) => (
+                  <rect key={`${r}-${c}`} x={16 + c*34} y={30 + r*26} width="24" height="18" rx="3" fill="#BFDBFE" stroke="#93C5FD" />
+                ))
+              ))}
+              <rect x="68" y="86" width="24" height="20" rx="3" fill="#94A3B8" />
+            </g>
+
+            {/* Student character */}
+            <motion.g
+              transform="translate(-120, 180)"
+              animate={prefersReducedMotion ? undefined : { x: [0, 1320] }}
+              transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
             >
-              <div className="px-2 py-1 text-[10px] md:text-xs font-semibold text-slate-700">Gedung Kelas</div>
-              <div className="grid grid-cols-3 gap-1 px-2">
-                {[...Array(6)].map((_, i) => (
-                  <div key={i} className="h-4 md:h-5 bg-sky-200/70 border border-sky-300/60 rounded-sm" />
-                ))}
-              </div>
-            </motion.div>
+              {/* shadow */}
+              <ellipse cx="60" cy="86" rx="30" ry="6" fill="#000" opacity="0.12" />
 
-            {/* student marker */}
-            <motion.div
-              className="absolute bottom-16 left-0"
-              animate={prefersReducedMotion ? undefined : { x: ['-5%', '105%'] }}
-              transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <motion.div
-                className="relative flex items-center gap-2"
-                animate={prefersReducedMotion ? undefined : { y: [0, -2, 0, 2, 0] }}
-                transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-              >
-                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-sky-500 to-indigo-500 border border-white shadow-md" />
-                <GraduationCap className="text-slate-700/90" size={16} />
-              </motion.div>
-              <div className="absolute top-7 left-1.5 w-6 h-2 bg-slate-400/40 rounded-full blur-[1px]" />
-            </motion.div>
-          </motion.div>
+              {/* backpack */}
+              <rect x="42" y="28" width="28" height="34" rx="6" fill="#6366F1" stroke="#4F46E5" />
+
+              {/* body */}
+              <rect x="56" y="24" width="32" height="48" rx="8" fill="#0EA5E9" stroke="#0284C7" />
+
+              {/* head */}
+              <circle cx="72" cy="16" r="12" fill="#FDE68A" stroke="#F59E0B" />
+              {/* cap */}
+              <polygon points="60,6 84,6 72,0" fill="#334155" />
+              <rect x="69" y="6" width="6" height="6" fill="#334155" />
+
+              {/* left arm */}
+              <motion.rect x="50" y="30" width="8" height="26" rx="4" fill="#0284C7" style={{ transformOrigin: '54px 30px' }}
+                animate={prefersReducedMotion ? undefined : { rotate: [20, -10, 20] }}
+                transition={{ duration: 0.8, repeat: Infinity, ease: 'easeInOut' }}
+              />
+              {/* right arm */}
+              <motion.rect x="88" y="30" width="8" height="26" rx="4" fill="#0284C7" style={{ transformOrigin: '92px 30px' }}
+                animate={prefersReducedMotion ? undefined : { rotate: [-10, 20, -10] }}
+                transition={{ duration: 0.8, repeat: Infinity, ease: 'easeInOut' }}
+              />
+
+              {/* left leg */}
+              <motion.rect x="58" y="70" width="8" height="26" rx="4" fill="#1F2937" style={{ transformOrigin: '62px 70px' }}
+                animate={prefersReducedMotion ? undefined : { rotate: [-14, 14, -14] }}
+                transition={{ duration: 0.8, repeat: Infinity, ease: 'easeInOut' }}
+              />
+              {/* right leg */}
+              <motion.rect x="78" y="70" width="8" height="26" rx="4" fill="#111827" style={{ transformOrigin: '82px 70px' }}
+                animate={prefersReducedMotion ? undefined : { rotate: [14, -14, 14] }}
+                transition={{ duration: 0.8, repeat: Infinity, ease: 'easeInOut' }}
+              />
+
+              {/* shoes */}
+              <rect x="54" y="94" width="16" height="6" rx="3" fill="#0F172A" />
+              <rect x="74" y="94" width="16" height="6" rx="3" fill="#0F172A" />
+            </motion.g>
+
+            {/* Floating clouds */}
+            {!prefersReducedMotion && (
+              <>
+                <motion.ellipse cx="120" cy="60" rx="36" ry="12" fill="#FFFFFF" opacity="0.8" animate={{ x: [0, 40, 0] }} transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }} />
+                <motion.ellipse cx="260" cy="70" rx="26" ry="10" fill="#FFFFFF" opacity="0.8" animate={{ x: [0, 60, 0] }} transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }} />
+                <motion.ellipse cx="980" cy="50" rx="32" ry="12" fill="#FFFFFF" opacity="0.8" animate={{ x: [0, -40, 0] }} transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }} />
+              </>
+            )}
+          </motion.svg>
         </motion.section>
       </main>
     </div>
