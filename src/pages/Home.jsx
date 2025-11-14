@@ -1,9 +1,11 @@
 import Navbar from '../components/Navbar'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { GraduationCap, ShieldCheck, Sparkles, ArrowRight, Users, Library } from 'lucide-react'
 
 export default function Home() {
+  const prefersReducedMotion = useReducedMotion()
+
   return (
     <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-sky-50 via-white to-indigo-50">
       <Navbar />
@@ -12,17 +14,17 @@ export default function Home() {
       <motion.div aria-hidden initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
         <motion.div
           className="pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-sky-300/30 blur-3xl"
-          animate={{ x: [0, 40, -20, 0], y: [0, 20, -10, 0], scale: [1, 1.08, 0.96, 1] }}
+          animate={prefersReducedMotion ? undefined : { x: [0, 40, -20, 0], y: [0, 20, -10, 0], scale: [1, 1.08, 0.96, 1] }}
           transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
           className="pointer-events-none absolute bottom-0 -right-16 h-[28rem] w-[28rem] rounded-full bg-indigo-300/30 blur-3xl"
-          animate={{ x: [0, -50, 25, 0], y: [0, -10, 30, 0], scale: [1, 1.05, 0.98, 1] }}
+          animate={prefersReducedMotion ? undefined : { x: [0, -50, 25, 0], y: [0, -10, 30, 0], scale: [1, 1.05, 0.98, 1] }}
           transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
           className="pointer-events-none absolute top-1/3 right-1/4 h-64 w-64 rounded-full bg-cyan-200/40 blur-3xl"
-          animate={{ rotate: [0, 60, -45, 0] }}
+          animate={prefersReducedMotion ? undefined : { rotate: [0, 60, -45, 0] }}
           transition={{ duration: 22, repeat: Infinity, ease: 'linear' }}
         />
       </motion.div>
@@ -90,78 +92,86 @@ export default function Home() {
           </motion.div>
         </div>
 
-        {/* Scene: Mahasiswa berjalan menuju kelas */}
-        <motion.div
-          className="relative mt-16 h-40 md:h-48 rounded-3xl overflow-hidden border border-white/50 bg-gradient-to-r from-sky-100/70 to-indigo-100/60 backdrop-blur"
-          initial={{ opacity: 0, y: 10 }}
+        {/* Refined campus strip animation */}
+        <motion.section
+          className="relative mt-16 rounded-3xl overflow-hidden border border-white/50 bg-white/60 backdrop-blur shadow-lg"
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
         >
-          {/* Jalan */}
-          <div className="absolute bottom-0 left-0 right-0 h-10 md:h-12 bg-slate-200/80" />
+          {/* Gradient sky */}
+          <div className="absolute inset-0 bg-gradient-to-r from-sky-50 via-sky-100 to-indigo-100" />
 
-          {/* Pohon sederhana */}
-          <div className="absolute bottom-10 left-4 hidden sm:block">
-            <div className="w-2 h-8 bg-emerald-700 rounded" />
-            <div className="w-8 h-8 -mt-1 bg-emerald-400 rounded-full" />
-          </div>
-
-          {/* Gedung kelas (tujuan) */}
+          {/* Parallax layers: skyline */}
           <motion.div
-            className="absolute bottom-10 right-4 w-28 md:w-36 h-20 md:h-24 bg-white/90 border border-slate-200 rounded-lg shadow"
-            initial={{ y: 10, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.3 }}
+            className="relative h-36 md:h-44"
           >
-            <div className="px-2 py-1 text-[10px] md:text-xs font-semibold text-slate-700">Gedung Kelas</div>
-            <div className="grid grid-cols-3 gap-1 px-2">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-4 md:h-5 bg-sky-200/70 border border-sky-300/60 rounded-sm" />
-              ))}
-            </div>
-            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-10 h-2 bg-slate-300/90 rounded-full" />
-          </motion.div>
-
-          {/* Mahasiswa berjalan */}
-          <motion.div
-            aria-label="Mahasiswa berjalan menuju kelas"
-            className="absolute bottom-10 left-[-80px] md:left-[-100px]"
-            animate={{ x: ['0%', '110%'] }}
-            transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-          >
+            {/* back buildings */}
             <motion.div
-              className="relative flex items-end"
-              animate={{ y: [0, -2, 0, 2, 0] }}
-              transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+              className="absolute inset-x-0 bottom-16 flex gap-6 px-6"
+              style={{ opacity: 0.35 }}
+              animate={prefersReducedMotion ? undefined : { x: [0, 10, 0] }}
+              transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
             >
-              {/* tubuh */}
-              <div className="w-6 h-10 md:w-7 md:h-12 bg-sky-500 rounded-md shadow-md border border-sky-600/30" />
-              {/* kepala */}
-              <div className="absolute -top-5 left-1/2 -translate-x-1/2 w-6 h-6 md:w-7 md:h-7 bg-amber-200 rounded-full border border-amber-300" />
-              {/* topi wisuda */}
-              <GraduationCap className="absolute -top-7 left-1/2 -translate-x-1/2 text-slate-700" size={18} />
-              {/* tas */}
-              <div className="absolute top-0 -left-3 w-3 h-5 md:w-3.5 md:h-6 bg-indigo-500 rounded-sm shadow border border-indigo-600/30" />
-              {/* kaki (ayunan) */}
-              <motion.div className="absolute -bottom-1 left-0 w-10 h-2" animate={{ rotate: [8, -8, 8] }} transition={{ duration: 0.8, repeat: Infinity, ease: 'easeInOut' }}>
-                <div className="absolute left-0 w-4 h-1 bg-slate-700/70 rounded-full" />
-                <div className="absolute left-5 w-4 h-1 bg-slate-700/70 rounded-full" />
+              <div className="h-12 w-24 bg-slate-300/60 rounded-md" />
+              <div className="h-16 w-16 bg-slate-300/60 rounded-md" />
+              <div className="h-10 w-20 bg-slate-300/60 rounded-md" />
+              <div className="h-14 w-24 bg-slate-300/60 rounded-md" />
+            </motion.div>
+
+            {/* mid trees */}
+            <motion.div
+              className="absolute inset-x-0 bottom-12 flex items-end gap-3 px-6"
+              style={{ opacity: 0.6 }}
+              animate={prefersReducedMotion ? undefined : { x: [0, -12, 0] }}
+              transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className="flex flex-col items-center">
+                  <div className="w-1.5 h-6 bg-emerald-700 rounded" />
+                  <div className="w-6 h-6 -mt-1 bg-emerald-400 rounded-full" />
+                </div>
+              ))}
+            </motion.div>
+
+            {/* path */}
+            <svg className="absolute inset-x-0 bottom-0 h-20" viewBox="0 0 800 160" preserveAspectRatio="none" aria-hidden>
+              <path d="M0,120 C200,90 320,130 420,110 C540,84 660,108 800,90 L800,160 L0,160 Z" fill="rgba(148,163,184,0.45)" />
+              <path d="M0,130 C220,110 350,140 470,120 C600,100 700,120 800,105" fill="none" stroke="rgba(100,116,139,0.45)" strokeWidth="2" />
+            </svg>
+
+            {/* destination building */}
+            <motion.div
+              className="absolute right-6 bottom-16 w-28 md:w-36 h-20 md:h-24 bg-white/90 border border-slate-200 rounded-lg shadow"
+              initial={{ y: 8, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              <div className="px-2 py-1 text-[10px] md:text-xs font-semibold text-slate-700">Gedung Kelas</div>
+              <div className="grid grid-cols-3 gap-1 px-2">
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="h-4 md:h-5 bg-sky-200/70 border border-sky-300/60 rounded-sm" />
+                ))}
+              </div>
+            </motion.div>
+
+            {/* student marker */}
+            <motion.div
+              className="absolute bottom-16 left-0"
+              animate={prefersReducedMotion ? undefined : { x: ['-5%', '105%'] }}
+              transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              <motion.div
+                className="relative flex items-center gap-2"
+                animate={prefersReducedMotion ? undefined : { y: [0, -2, 0, 2, 0] }}
+                transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-sky-500 to-indigo-500 border border-white shadow-md" />
+                <GraduationCap className="text-slate-700/90" size={16} />
               </motion.div>
+              <div className="absolute top-7 left-1.5 w-6 h-2 bg-slate-400/40 rounded-full blur-[1px]" />
             </motion.div>
           </motion.div>
-
-          {/* Awan bergerak */}
-          <motion.div
-            className="absolute top-4 left-4 w-16 h-6 bg-white/80 rounded-full blur-sm"
-            animate={{ x: [0, 40, 0] }}
-            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-          />
-          <motion.div
-            className="absolute top-6 left-24 w-10 h-4 bg-white/80 rounded-full blur-[2px]"
-            animate={{ x: [0, 60, 0] }}
-            transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-          />
-        </motion.div>
+        </motion.section>
       </main>
     </div>
   )
